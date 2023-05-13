@@ -2,12 +2,12 @@ import cv2, os, sys, shutil
 
 # Declaration
 global isMatch
-isMatch = False
+isMatch = bool
 
 # Menu function 
 def menu() :
     print("========================================")
-    print("--- Welcome to Smart FingerPrint ---")
+    print(" --- Welcome to Smart FingerPrint ---")
     print("========================================")
     print("> Menu Options")
     print("\t1 - Add new print")
@@ -20,24 +20,24 @@ def add_print():
     destination_path = 'database'
     shutil.copy(source_path, destination_path)
     
-    separator = source_path.split('\\')
+    separator = source_path.split('//')
     x = separator[-1]
     name_ext = x.split('.')
-    old_name = name_ext[0]
+    old_name = name_ext[0].split('/')
+    oldName = old_name[-1]
+    print("OldName : ",oldName)
     extension = name_ext[1]
 
     new_name = input('Enter your name : ')
-
-    os.rename('database/'+old_name+'.'+extension, 'database/'+new_name+'.'+extension)
+    os.rename('database/'+oldName+'.'+extension, 'database/'+new_name+'.'+extension)
 
 # Verify print
 def verify_print():
     imgToVerifyPath = input('Please enter your image path : ')
     source_image = cv2.imread(imgToVerifyPath)
     score=0
-    # file_name=None
-    # image=None
     kp1,kp2,mp=None,None,None
+    global isMatch
 
     for file in [file for file in os.listdir("database")]:
         target_image = cv2.imread("./database/" + file)
@@ -64,9 +64,9 @@ def verify_print():
                     cv2.imshow("result", result)
                     cv2.waitKey(0)
                     cv2.destroyAllWindows()
-                    global isMatch
                     isMatch = True
-                    break;
+                    break
+    isMatch = False
 
 # Quit App
 def quit_app():
